@@ -4,7 +4,7 @@
 ## Cloud-Hosted-Notebook-Data-Manipulation
 ### By Tursunai Turumbekova 
 
-![Demo Video](https://youtu.be/n0ekO6AFqhk)
+[Demo Video](https://youtu.be/n0ekO6AFqhk)
 ## Overview
 This project provides an analysis of Amazon sales data on a cloud-hosted Jupyter notebook, accessible via Google Colab. It enables data exploration, visualization, and forecasting using SARIMA and Prophet models to support inventory management and demand prediction.
 This project provides an analysis of Amazon sales data, focusing on identifying top-selling items, understanding demand patterns influenced by fulfillment and courier performance, and forecasting future demand to optimize inventory and fulfillment planning. Using techniques in data exploration, demand trend analysis, and time series forecasting, this project aims to uncover insights that support better decision-making in product stocking and distribution.
