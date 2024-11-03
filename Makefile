@@ -14,9 +14,7 @@ format:
 
 # Lint Python files with Ruff (faster than Pylint)
 lint:
-	# Uncomment below to use pylint for additional checks if needed
-	# pylint --disable=R,C --ignore-patterns=test_.*?py *.py
-	ruff check *.py
+    ruff check *.py
 
 # Lint Dockerfile with Hadolint
 container-lint:

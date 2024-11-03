@@ -36,6 +36,9 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: Install Ruff
+        run: pip install ruff
+
       - name: Run linting with Ruff
         run: ruff check main.py test_main.py
 
@@ -49,6 +52,9 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
+
+      - name: Install Black
+        run: pip install black
 
       - name: Check formatting with Black
         run: black --check main.py test_main.py
