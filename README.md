@@ -1,9 +1,43 @@
+[![CI/CD Pipeline](https://github.com/tursunait/Cloud-Hosted-Notebook-Data-Manipulation-Tursunai/actions/workflows/cicd.yml/badge.svg)](https://github.com/tursunait/Cloud-Hosted-Notebook-Data-Manipulation-Tursunai/actions/workflows/cicd.yml)
+
 # Amazon Sales Data Analysis and Demand Forecasting
 ## Cloud-Hosted-Notebook-Data-Manipulation
 ### By Tursunai Turumbekova 
 
 ## Overview
+This project provides an analysis of Amazon sales data on a cloud-hosted Jupyter notebook, accessible via Google Colab. It enables data exploration, visualization, and forecasting using SARIMA and Prophet models to support inventory management and demand prediction.
 This project provides an analysis of Amazon sales data, focusing on identifying top-selling items, understanding demand patterns influenced by fulfillment and courier performance, and forecasting future demand to optimize inventory and fulfillment planning. Using techniques in data exploration, demand trend analysis, and time series forecasting, this project aims to uncover insights that support better decision-making in product stocking and distribution.
+
+## Key Features
+
+- **Google Colab Ready**: Accessible with one click for users to run and explore.
+- **Docker and DevContainer Support**: Allows the project to run in a reproducible environment.
+- **CI/CD Automation**: Ensures code quality and reliability through automated tests, linting, and formatting.
+
+## Project Structure
+
+```plaintext
+.
+├── .devcontainer/               # DevContainer configuration for VS Code
+│   └── devcontainer.json        # Specifies Docker setup for the development environment
+├── .github/workflows/           # GitHub Actions workflows for CI/CD
+│   └── cicd.yml                 # CI/CD pipeline configuration
+├── content/                     # Folder for storing data (Google Colab Drive connection)
+│   └── drive/MyDrive/Colab Notebooks/
+│       └── Amazon Sale Report.csv  # Sales data file used in the analysis
+├── img/                         # Folder for images and visualizations
+├── __pycache__/                 # Python cache files
+├── .pytest_cache/               # Pytest cache directory
+├── .ruff_cache/                 # Ruff linter cache directory
+├── cloud.ipynb                  # Main Jupyter notebook for cloud-hosted analysis
+├── main.py                      # Python script for data analysis functions
+├── test_main.py                 # Unit tests for the main script
+├── Makefile                     # Automation commands for development tasks
+├── Dockerfile                   # Docker setup for containerized environment
+├── pyproject.toml               # Project configuration for dependencies and settings
+├── requirements.txt             # Python dependencies required to run the project
+└── README.md                    # Project documentation (this file)
+```
 
 ## Project Objectives
 1. **Define Top-Selling Items**: Identify items with consistently high sales or revenue to better understand what drives demand.
@@ -34,42 +68,50 @@ This project provides an analysis of Amazon sales data, focusing on identifying 
    - **Inventory and Fulfillment Planning**: Forecasting results support proactive planning for high-demand periods and inventory adjustments, minimizing stockouts and improving customer satisfaction.
    - **Recommendation**: Regularly update the model with new data to refine predictions and respond to demand fluctuations.
 ![Demand Forecast for Top-Selling Items](img/forecast.png)
+
+# Getting Started with Google Colab
+
+## Running the Notebook on Colab
+
+To use this project on Google Colab:
+
+1. **Click the Colab badge** at the top of this README, or [open this link](https://colab.research.google.com/github/tursunait/Cloud-Hosted-Notebook-Data-Manipulation-Tursunai/blob/main/cloud.ipynb).
+2. **Upload the dataset** if prompted, or load data from your Google Drive by linking it with Colab.
+3. **Run each cell** to interactively analyze the data and view the results.
+
+> **Note**: The Colab environment is pre-configured with all required libraries specified in `requirements.txt`, ensuring a smooth cloud-hosted experience.
+
+# Usage with DevContainer
+
+This project includes a **DevContainer** configuration:
+
+- **`devcontainer.json`**: Configures the development environment using VS Code and Docker.
+- **Docker Support**: A `Dockerfile` specifies the dependencies and setup, allowing consistent development across different machines.
+
+# Makefile Commands
+
+The `Makefile` automates essential tasks, ensuring code quality and consistent data processing:
+
+- **`make install`**: Installs required packages from `requirements.txt`.
+- **`make test`**: Runs tests for notebooks and code files.
+- **`make format`**: Formats Python files using `black`.
+- **`make lint`**: Lints code with `ruff`.
+- **`make refactor`**: Combines formatting and linting for a clean codebase.
+- **`make all`**: Runs the full pipeline (`install`, `lint`, `test`, `format`, and `deploy` if defined).
+
+# CI/CD Pipeline
+
+An automated CI/CD pipeline (defined in `.github/workflows/cicd.yml`) is configured to:
+
+1. **Lint**: Enforce code style and quality.
+2. **Format**: Ensure consistent code formatting.
+3. **Test**: Verify functionality.
+4. **Deploy**: (If applicable) Deploy the project.
 ## Dependencies
 Refer to `requirements.txt` for a list of packages required, including:
 - **DevOps Tools**: `black`, `pytest`, `pytest-cov`, `nbval`
 - **Analysis Tools**: `pandas`, `matplotlib`, `tabulate`
 - **Ruff Linter**: `ruff`
-
-Install all dependencies with:
-```bash
-make install
-```
-
-## Makefile Commands
-The `Makefile` automates essential tasks, ensuring code quality and consistent data processing:
-
-- **`make install`**: Installs all required packages.
-- **`make test`**: Runs tests on IPython notebooks and code files.
-- **`make format`**: Formats Python files using Black.
-- **`make lint`**: Lints code with Ruff.
-- **`make refactor`**: Combines formatting and linting for a clean codebase.
-- **`make all`**: Executes the full pipeline (`install`, `lint`, `test`, `format`, and `deploy` if defined).
-
-## CI/CD Pipeline
-An automated CI/CD pipeline is configured to:
-
-1. **Lint**: Enforces code style and quality.
-2. **Format**: Ensures code consistency.
-3. **Test**: Verifies functionality and accuracy of the code.
-4. **Deploy**: (If applicable) Deploys the project.
-
-## Project Structure
-- `data/`: Contains raw and processed data files.
-- `notebooks/`: Jupyter notebooks for exploratory data analysis and modeling.
-- `src/`: Core Python scripts for data processing, analysis, and modeling.
-- `tests/`: Unit tests for code validation.
-- `requirements.txt`: List of dependencies.
-- `Makefile`: Command-line automation of project tasks.
 
 ## Future Enhancements
 - **Integration of Prophet**: Expand demand forecasting by comparing SARIMA with Prophet, exploring Prophet's handling of seasonality and trends.
