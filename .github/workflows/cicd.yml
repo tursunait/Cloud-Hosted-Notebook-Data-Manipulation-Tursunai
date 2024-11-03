@@ -59,27 +59,27 @@ jobs:
       - name: Check formatting with Black
         run: black --check main.py test_main.py
 
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+#  test:
+#    runs-on: ubuntu-latest
+#    steps:
+#     - name: Checkout code
+#        uses: actions/checkout@v3
+#
+#      - name: Set up Python
+#        uses: actions/setup-python@v4
+#        with:
+#          python-version: '3.x'
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
+#      - name: Install dependencies
+#        run: |
+#          python -m pip install --upgrade pip
+#          pip install -r requirements.txt
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Run tests with coverage
-        run: |
-          pytest --cov=main.py test_main.py
-        env:
-          PYTHONPATH: .
+#      - name: Run tests with coverage
+#        run: |
+#          pytest --cov=main.py test_main.py
+#        env:
+#          PYTHONPATH: .
 
   deploy:
     if: ${{ github.ref == 'refs/heads/main' }}

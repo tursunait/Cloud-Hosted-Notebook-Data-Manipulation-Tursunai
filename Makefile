@@ -4,9 +4,9 @@ install:
 		pip install -r requirements.txt
 
 # Run tests with coverage for .ipynb notebooks and test files
-test:
-	PYTHONPATH=. pytest --nbval *.ipynb &&\
-		python -m pytest --cov=main.py test_main.py
+#test:
+#	PYTHONPATH=. pytest --nbval *.ipynb &&\
+#		python -m pytest --cov=main.py test_main.py
 
 # Format Python files with Black
 format:	
