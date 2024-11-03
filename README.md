@@ -69,9 +69,9 @@ This project provides an analysis of Amazon sales data, focusing on identifying 
    - **Recommendation**: Regularly update the model with new data to refine predictions and respond to demand fluctuations.
 ![Demand Forecast for Top-Selling Items](img/forecast.png)
 
-# Getting Started with Google Colab
+## Getting Started with Google Colab
 
-## Running the Notebook on Colab
+### Running the Notebook on Colab
 
 To use this project on Google Colab:
 
@@ -81,14 +81,14 @@ To use this project on Google Colab:
 
 > **Note**: The Colab environment is pre-configured with all required libraries specified in `requirements.txt`, ensuring a smooth cloud-hosted experience.
 
-# Usage with DevContainer
+### Usage with DevContainer
 
 This project includes a **DevContainer** configuration:
 
 - **`devcontainer.json`**: Configures the development environment using VS Code and Docker.
 - **Docker Support**: A `Dockerfile` specifies the dependencies and setup, allowing consistent development across different machines.
 
-# Makefile Commands
+### Makefile Commands
 
 The `Makefile` automates essential tasks, ensuring code quality and consistent data processing:
 
@@ -99,7 +99,7 @@ The `Makefile` automates essential tasks, ensuring code quality and consistent d
 - **`make refactor`**: Combines formatting and linting for a clean codebase.
 - **`make all`**: Runs the full pipeline (`install`, `lint`, `test`, `format`, and `deploy` if defined).
 
-# CI/CD Pipeline
+### CI/CD Pipeline
 
 An automated CI/CD pipeline (defined in `.github/workflows/cicd.yml`) is configured to:
 
@@ -113,10 +113,10 @@ Refer to `requirements.txt` for a list of packages required, including:
 - **Analysis Tools**: `pandas`, `matplotlib`, `tabulate`
 - **Ruff Linter**: `ruff`
 
-## Future Enhancements
+### Future Enhancements
 - **Integration of Prophet**: Expand demand forecasting by comparing SARIMA with Prophet, exploring Prophet's handling of seasonality and trends.
 - **Model Optimization**: Enhance SARIMA model performance by tuning parameters based on demand patterns.
 - **Real-time Data Feeds**: Incorporate real-time sales and courier data to update forecasts dynamically.
 
-## License
+### License
 This project is licensed under the [MIT License](LICENSE).
