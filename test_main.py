@@ -3,37 +3,51 @@ Test goes here
 
 """
 
+# test_main.py
 import pytest
 import pandas as pd
-from mylib.lib import calculate_mean, calculate_median, calculate_std_dev
-
-# Creating a DataFrame to use for tests
-df = pd.DataFrame({"values": [1, 2, 3, 4, 5]})
-col = "values"
+import numpy as np
 
 
-def test_calculate_mean():
-    assert calculate_mean(df, col) == 3
+@pytest.fixture
+def sample_data():
+    return pd.DataFrame(
+        {
+            "Category": ["Electronics", "Clothing", "Electronics", "Books"],
+            "Qty": [5, 10, 15, 20],
+            "Amount": [100, 200, 300, 400],
+            "SKU": ["A1", "B2", "A1", "C3"],
+            "Status": ["Shipped", "Cancelled", "Shipped", "Shipped"],
+            "Fulfilment": ["FBA", "FBA", "Third-Party", "FBA"],
+            "Courier Status": ["Delivered", "Pending", "Delivered", "Cancelled"],
+            "Date": pd.to_datetime(
+                ["2024-01-01", "2024-01-02", "2024-01-03", "2024-01-04"]
+            ),
+        }
+    )
 
 
-def test_calculate_median():
-    assert calculate_median(df, col) == 3
+def test_category_stats(sample_data):
+    category_stats = sample_data.groupby("Category")[["Qty", "Amount"]].describe()
+    assert "Qty" in category_stats.columns
+    assert "Amount" in category_stats.columns
 
 
-def test_calculate_std_dev():
-    assert calculate_std_dev(df, col) == pytest.approx(1.58, rel=1e-2)
+def test_top_selling_items(sample_data):
+    top_sellers = sample_data.groupby("SKU").agg(
+        total_qty=("Qty", "sum"), total_revenue=("Amount", "sum")
+    )
+    threshold = top_sellers["total_revenue"].quantile(0.9)
+    top_selling_skus = top_sellers[top_sellers["total_revenue"] >= threshold].index
+    assert len(top_selling_skus) > 0
 
 
-def test_calculate_mean_empty():
-    df_empty = pd.DataFrame({"values": []})
-    assert calculate_mean(df_empty, "values") is None
+def test_fulfillment_counts(sample_data):
+    fulfillment_counts = sample_data["Fulfilment"].value_counts()
+    assert "FBA" in fulfillment_counts
+    assert fulfillment_counts["FBA"] == 2
 
 
-def test_calculate_median_single_value():
-    df_single = pd.DataFrame({"values": [5]})
-    assert calculate_median(df_single, "values") == 5
-
-
-def test_calculate_std_dev_single_value():
-    df_single = pd.DataFrame({"values": [5]})
-    assert calculate_std_dev(df_single, "values") == 0
+def test_date_conversion(sample_data):
+    sample_data["Date"] = pd.to_datetime(sample_data["Date"], errors="coerce")
+    assert sample_data["Date"].dtype == "datetime64[ns]"

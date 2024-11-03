@@ -1,0 +1,51 @@
+stages:
+  - install
+  - lint
+  - format
+  - test
+  - deploy
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+# Install dependencies
+install:
+  stage: install
+  script:
+    - make install
+  cache:
+    paths:
+      - .cache/pip/
+
+# Run linting with Ruff
+lint:
+  stage: lint
+  script:
+    - make lint
+
+# Run formatting check with Black
+format:
+  stage: format
+  script:
+    # Check formatting without changing files
+    - black --check *.py
+    - black --check mylib/*.py
+
+# Run tests with coverage
+test:
+  stage: test
+  script:
+    - make test
+  artifacts:
+    paths:
+      - coverage.xml
+    coverage: '/TOTAL.*\s+(\d+\%)$/'
+
+# Deploy (optional stage if you have a deploy process)
+deploy:
+  stage: deploy
+  script:
+    # Placeholder for deployment commands, if any
+    - echo "Deploying application..."
+  only:
+    - main  # Run deployment only on the main branch
