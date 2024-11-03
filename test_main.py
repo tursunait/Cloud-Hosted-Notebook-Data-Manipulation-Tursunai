@@ -1,52 +1,45 @@
-"""
-Test goes here
-
-"""
-
 # test_main.py
-import pytest
+
 import pandas as pd
+import pytest
+from main import calculate_category_stats, calculate_top_sellers, forecast_demand
 
 
+# Sample test data
 @pytest.fixture
 def sample_data():
     return pd.DataFrame(
         {
-            "Category": ["Electronics", "Clothing", "Electronics", "Books"],
-            "Qty": [5, 10, 15, 20],
-            "Amount": [100, 200, 300, 400],
-            "SKU": ["A1", "B2", "A1", "C3"],
-            "Status": ["Shipped", "Cancelled", "Shipped", "Shipped"],
-            "Fulfilment": ["FBA", "FBA", "Third-Party", "FBA"],
-            "Courier Status": ["Delivered", "Pending", "Delivered", "Cancelled"],
-            "Date": pd.to_datetime(
-                ["2024-01-01", "2024-01-02", "2024-01-03", "2024-01-04"]
-            ),
+            "Category": ["Electronics", "Clothing", "Books"],
+            "Qty": [10, 20, 30],
+            "Amount": [100.0, 200.0, 300.0],
+            "SKU": ["A1", "B2", "C3"],
+            "Status": ["Shipped", "Cancelled", "Shipped"],
+            "Fulfilment": ["FBA", "FBA", "Third-Party"],
+            "Courier Status": ["Delivered", "Pending", "Cancelled"],
+            "Date": pd.to_datetime(["2024-01-01", "2024-01-02", "2024-01-03"]),
         }
     )
 
 
-def test_category_stats(sample_data):
-    category_stats = sample_data.groupby("Category")[["Qty", "Amount"]].describe()
-    assert "Qty" in category_stats.columns
-    assert "Amount" in category_stats.columns
+def test_calculate_category_stats(sample_data):
+    category_stats = calculate_category_stats(sample_data)
+    assert "Qty" in category_stats.columns.levels[1]
+    assert "Amount" in category_stats.columns.levels[1]
 
 
-def test_top_selling_items(sample_data):
-    top_sellers = sample_data.groupby("SKU").agg(
-        total_qty=("Qty", "sum"), total_revenue=("Amount", "sum")
+def test_calculate_top_sellers(sample_data):
+    top_sellers = calculate_top_sellers(sample_data)
+    assert not top_sellers.empty
+
+
+def test_forecast_demand():
+    # Create mock daily demand data
+    daily_demand = pd.Series(
+        [10, 12, 15, 10, 20, 25, 30], index=pd.date_range(start="2024-01-01", periods=7)
     )
-    threshold = top_sellers["total_revenue"].quantile(0.9)
-    top_selling_skus = top_sellers[top_sellers["total_revenue"] >= threshold].index
-    assert len(top_selling_skus) > 0
-
-
-def test_fulfillment_counts(sample_data):
-    fulfillment_counts = sample_data["Fulfilment"].value_counts()
-    assert "FBA" in fulfillment_counts
-    assert fulfillment_counts["FBA"] == 2
-
-
-def test_date_conversion(sample_data):
-    sample_data["Date"] = pd.to_datetime(sample_data["Date"], errors="coerce")
-    assert sample_data["Date"].dtype == "datetime64[ns]"
+    forecast = forecast_demand(daily_demand)
+    assert "yhat" in forecast.columns
+    assert len(forecast) > len(
+        daily_demand
+    )  # Check forecast goes beyond historical data
