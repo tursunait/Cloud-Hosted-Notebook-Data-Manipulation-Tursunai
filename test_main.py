@@ -20,17 +20,18 @@ sample_data = {
     "Date": ["04-01-22", "04-02-22", "04-03-22", "04-04-22"],
 }
 
+# Convert to DataFrame and ensure proper data types
 sample_df = pd.DataFrame(sample_data)
+sample_df["Qty"] = pd.to_numeric(sample_df["Qty"], errors="coerce")
+sample_df["Amount"] = pd.to_numeric(sample_df["Amount"], errors="coerce")
+sample_df["Date"] = pd.to_datetime(sample_df["Date"], errors="coerce")
 
 
 def test_load_data(monkeypatch):
-    # Mock pd.read_csv to return sample_df
     def mock_read_csv(filepath):
         return sample_df
 
     monkeypatch.setattr(pd, "read_csv", mock_read_csv)
-
-    # Run load_data with a fake file path
     df = load_data("fake_path.csv")
     pd.testing.assert_frame_equal(df, sample_df)
 
@@ -50,7 +51,6 @@ def test_calculate_top_sellers():
 
 
 def test_plot_category_count():
-    # Just check if it runs without error
     try:
         plot_category_count(sample_df)
     except Exception as e:
@@ -58,7 +58,6 @@ def test_plot_category_count():
 
 
 def test_plot_status_count():
-    # Just check if it runs without error
     try:
         plot_status_count(sample_df)
     except Exception as e:
@@ -66,10 +65,10 @@ def test_plot_status_count():
 
 
 def test_forecast_demand():
-    # Prepare daily demand data for forecast test
-    daily_demand = sample_df.groupby("Date")["Qty"].sum()
+    daily_demand = sample_df.groupby("Date")["Qty"].sum().reset_index()
+    daily_demand.columns = ["ds", "y"]
+    daily_demand["ds"] = pd.to_datetime(daily_demand["ds"], errors="coerce")
 
-    # Check if forecast runs without errors and returns the correct structure
     try:
         forecast = forecast_demand(daily_demand)
         assert "ds" in forecast.columns
