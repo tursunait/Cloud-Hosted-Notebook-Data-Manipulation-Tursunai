@@ -1,51 +1,83 @@
-stages:
-  - install
-  - lint
-  - format
-  - test
-  - deploy
+name: CI/CD Pipeline
 
-variables:
-  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
-# Install dependencies
-install:
-  stage: install
-  script:
-    - make install
-  cache:
-    paths:
-      - .cache/pip/
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-# Run linting with Ruff
-lint:
-  stage: lint
-  script:
-    - make lint
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
 
-# Run formatting check with Black
-format:
-  stage: format
-  script:
-    # Check formatting without changing files
-    - black --check *.py
-    - black --check mylib/*.py
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-# Run tests with coverage
-test:
-  stage: test
-  script:
-    - make test
-  artifacts:
-    paths:
-      - coverage.xml
-    coverage: '/TOTAL.*\s+(\d+\%)$/'
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-# Deploy (optional stage if you have a deploy process)
-deploy:
-  stage: deploy
-  script:
-    # Placeholder for deployment commands, if any
-    - echo "Deploying application..."
-  only:
-    - main  # Run deployment only on the main branch
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Run linting with Ruff
+        run: ruff check main.py test_main.py
+
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Check formatting with Black
+        run: black --check main.py test_main.py
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run tests with coverage
+        run: |
+          pytest --cov=main.py test_main.py
+        env:
+          PYTHONPATH: .
+
+  deploy:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy placeholder
+        run: echo "Deploying application..."

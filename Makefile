@@ -5,8 +5,8 @@ install:
 
 # Run tests with coverage for .ipynb notebooks and test files
 test:
-	PYTHONPATH=./mylib pytest --nbval *.ipynb &&\
-		python -m pytest --cov=mylib test_main.py mylib/test_lib.py
+	PYTHONPATH=. pytest --nbval *.ipynb &&\
+		python -m pytest --cov=main.py test_main.py
 
 # Format Python files with Black
 format:	
@@ -15,8 +15,8 @@ format:
 # Lint Python files with Ruff (faster than Pylint)
 lint:
 	# Uncomment below to use pylint for additional checks if needed
-	# pylint --disable=R,C --ignore-patterns=test_.*?py *.py mylib/*.py
-	ruff check *.py mylib/*.py
+	# pylint --disable=R,C --ignore-patterns=test_.*?py *.py
+	ruff check *.py
 
 # Lint Dockerfile with Hadolint
 container-lint:

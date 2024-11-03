@@ -11,9 +11,9 @@ Original file is located at
 """
 
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from prophet import Prophet
 
 df = pd.read_csv("/content/drive/MyDrive/Colab Notebooks/Amazon Sale Report.csv")
 
@@ -51,13 +51,6 @@ plt.xlabel("Amount")
 plt.ylabel("Frequency")
 plt.show()
 
-"""**Define "Top-Selling Items"**
-To identify items with consistently high sales volumes or revenue.
-
-Approach:
-* Group data by SKU, Category, or Style to calculate total sales volume (Qty) and revenue (Amount).
-* Define "top-selling items" based on the highest cumulative revenue or sales volume over a specified period (e.g., top 10% of items).
-"""
 
 # Aggregate data by SKU to get top-selling items
 top_sellers = df.groupby("SKU").agg(
@@ -73,26 +66,11 @@ top_sellers
 df_top_sellers = df[df["SKU"].isin(top_selling_skus)]
 df_top_sellers
 
-"""**Analyze Fulfillment and Courier Status for Top-Selling Items**
-To examine the fulfillment methods and courier statuses associated with these top-selling items to identify any patterns in delivery performance.
-
-Approach:
-* Filter data for top-selling SKUs.
-* Calculate the frequency of each Fulfillment and Courier Status for these items to determine common delivery outcomes.
-"""
 
 # Count fulfillment methods and courier statuses for top-selling items
 fulfillment_counts = df_top_sellers["Fulfilment"].value_counts()
 courier_status_counts = df_top_sellers["Courier Status"].value_counts()
 
-"""**Measure Future Demand Trends by Courier Status**
-To investigate if fulfillment and courier performance (e.g., delays, on-time deliveries) affect future sales volumes for top-selling products.
-
-Approach:
-* Calculate the average monthly or quarterly Qty for each SKU.
-* Compare trends in sales volume for products with different courier statuses, such as items that had frequent delays vs. items with consistently successful deliveries.
-
-"""
 
 # Drop rows with NaT values in 'Date' after conversion
 df_top_sellers.loc[:, "Date"] = df_top_sellers.dropna(subset=["Date"])
@@ -138,13 +116,6 @@ monthly_sales = (
 )
 df_top_sellers
 
-"""**Analyze Monthly Demand Trends by Courier Status**
-To analyze if different courier statuses (e.g., "Shipped" vs. "Cancelled") affect future demand.
-
-Approach:
-* Calculate monthly sales volumes for each SKU based on their courier statuses.
-* Observe if consistent cancellations or other statuses correlate with reduced future demand.
-"""
 
 # Group and calculate monthly sales volume for each SKU and Courier Status
 daily_sales = (
@@ -204,15 +175,6 @@ plt.legend(title="Order Status")
 plt.xticks(rotation=45)
 plt.show()
 
-"""**Compare Demand Trends for Different Fulfillment Methods**
-To assess if different fulfillment methods have unique impacts on future demand, especially if associated with particular courier statuses.
-Approach: Group data by both "Fulfillment" and "Courier Status" to calculate monthly demand for each combination.
-
-Approach:
-* To analyze how fulfillment methods (e.g., FBA or third-party logistics) impact demand trends. Combine this with courier statuses to observe if certain fulfillment methods experience more cancellations or delays, which could influence customer satisfaction.
-"""
-
-# Group by Fulfillment, Courier Status, and Date to calculate daily demand for each combination
 daily_fulfillment_status = (
     df_top_sellers.groupby(["Fulfilment", "Courier Status", "Date"])["Qty"]
     .sum()
@@ -221,8 +183,6 @@ daily_fulfillment_status = (
 )
 # Display the resulting table
 daily_fulfillment_status.head()
-
-"""To get a clear view, we’ll create separate line plots for each fulfillment method, showing trends for "Shipped," "Cancelled," and "Unshipped" statuses within each method. This will allow us to compare how different fulfillment methods handle demand and if certain methods experience more cancellations."""
 
 # List of unique fulfillment methods
 fulfillment_methods = df_top_sellers["Fulfilment"].unique()
@@ -264,11 +224,6 @@ monthly_fulfillment_status = (
 # Display the resulting table
 monthly_fulfillment_status.head()
 
-"""### **Demand Forecasting**
-Forecasting future demand is essential for effective inventory and fulfillment planning. By analyzing past sales data, we can anticipate demand trends for top-selling items, helping to optimize resources and improve customer satisfaction.
-
-In this analysis, we use Prophet, a powerful time series forecasting model, to project future demand based on completed sales (orders marked as "Shipped"). Prophet’s ability to handle seasonality and trends makes it ideal for identifying patterns in daily demand. This forecast will provide insights into expected sales volumes over the next 30 days, enabling better preparation for high-demand periods and reducing the risk of stockouts.
-"""
 
 # Filter data to include only 'Shipped' orders
 shipped_orders = df_top_sellers[df_top_sellers["Courier Status"] == "Shipped"]
@@ -281,7 +236,6 @@ monthly_demand = shipped_orders.groupby(shipped_orders["Date"].dt.to_period("M")
     "Qty"
 ].sum()
 
-from prophet import Prophet
 
 # Prepare data for Prophet
 # Ensure Date is named 'ds' and Quantity is named 'y'
@@ -308,8 +262,3 @@ plt.title("Demand Forecast for Top-Selling Items")
 plt.xlabel("Date")
 plt.ylabel("Forecasted Quantity")
 plt.show()
-
-"""### Demand Forecast Summary
-
-The SARIMA forecast indicates a gradual decline in daily demand for top-selling items, suggesting a potential seasonal dip. Historical data aligns well with the initial forecast, enhancing model credibility. The confidence interval widens over time, reflecting increased uncertainty in longer-term predictions. This trend suggests that inventory and fulfillment operations could be adjusted accordingly. Regular updates with new data are recommended to refine accuracy and respond to any unexpected demand shifts.
-"""
