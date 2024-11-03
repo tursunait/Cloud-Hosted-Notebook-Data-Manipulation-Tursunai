@@ -1,3 +1,10 @@
 # pyproject.toml
 [tool.ruff]
 line-length = 120
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::DeprecationWarning",  # Ignores all DeprecationWarnings
+    "ignore::UserWarning",         # Ignores all UserWarnings
+    "ignore:.*ast.Str is deprecated.*:DeprecationWarning",  # Ignore specific deprecation warning messages
+    "ignore:Could not infer format:UserWarning",            # Ignore a specific UserWarning from Prophet
+]
