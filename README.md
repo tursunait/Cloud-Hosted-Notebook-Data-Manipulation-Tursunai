@@ -43,7 +43,7 @@ This project provides an analysis of Amazon sales data, focusing on identifying 
 ## Project Objectives
 1. **Define Top-Selling Items**: Identify items with consistently high sales or revenue to better understand what drives demand.
 2. **Analyze Demand by Courier Status**: Examine how delivery performance impacts sales trends.
-3. **Demand Forecasting**: Predict future demand for top-selling items using time series forecasting, particularly SARIMA, to inform inventory and fulfillment needs.
+3. **Demand Forecasting**: Predict future demand for top-selling items using time series forecasting, particularly Prophet, to inform inventory and fulfillment needs.
 
 ## Approach and Methodology
 
@@ -115,7 +115,7 @@ Refer to `requirements.txt` for a list of packages required, including:
 - **Ruff Linter**: `ruff`
 
 ### Future Enhancements
-- **Model Optimization**: Enhance SARIMA model performance by tuning parameters based on demand patterns.
+- **Model Optimization**: Expand to SARIMA model by tuning parameters based on demand patterns.
 - **Real-time Data Feeds**: Incorporate real-time sales and courier data to update forecasts dynamically.
 
 ### License
