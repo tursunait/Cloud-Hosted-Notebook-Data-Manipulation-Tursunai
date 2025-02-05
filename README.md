@@ -6,7 +6,7 @@
 
 [Demo Video](https://youtu.be/n0ekO6AFqhk)
 ## Overview
-This project provides an analysis of Amazon sales data on a cloud-hosted Jupyter notebook, accessible via Google Colab. It enables data exploration, visualization, and forecasting using SARIMA and Prophet models to support inventory management and demand prediction.
+This project provides an analysis of Amazon sales data on a cloud-hosted Jupyter notebook, accessible via Google Colab. It enables data exploration, visualization, and forecasting using Prophet models to support inventory management and demand prediction.
 This project provides an analysis of Amazon sales data, focusing on identifying top-selling items, understanding demand patterns influenced by fulfillment and courier performance, and forecasting future demand to optimize inventory and fulfillment planning. Using techniques in data exploration, demand trend analysis, and time series forecasting, this project aims to uncover insights that support better decision-making in product stocking and distribution.
 
 ## Key Features
@@ -63,9 +63,9 @@ This project provides an analysis of Amazon sales data, focusing on identifying 
    - **Visualization**: Created line plots by fulfillment method to contrast demand trends for "Shipped," "Cancelled," and "Unshipped" statuses, helping to assess if certain fulfillment methods correlate with higher cancellations or reduced future demand.
 ![Daily Demand Trends by Fulfillment Method and Courier Status for Top-Selling Items](img/unfulfillment_by_method.png)
 
-### **4. Demand Forecasting Using SARIMA**
-   - **Forecasting Tool**: Leveraged SARIMA for time series forecasting to model future demand trends.
-   - **Model Insights**: SARIMA forecasts indicate a potential seasonal dip, with demand gradually declining for top-selling items. A widening confidence interval suggests increased uncertainty in longer-term predictions.
+### **4. Demand Forecasting Using Prophet**
+   - **Forecasting Tool**: Leveraged Prophet for time series forecasting to model future demand trends.
+   - **Model Insights**: Prophet forecasts indicate a potential seasonal dip, with demand gradually declining for top-selling items. A widening confidence interval suggests increased uncertainty in longer-term predictions.
    - **Inventory and Fulfillment Planning**: Forecasting results support proactive planning for high-demand periods and inventory adjustments, minimizing stockouts and improving customer satisfaction.
    - **Recommendation**: Regularly update the model with new data to refine predictions and respond to demand fluctuations.
 ![Demand Forecast for Top-Selling Items](img/forecast.png)
@@ -115,7 +115,6 @@ Refer to `requirements.txt` for a list of packages required, including:
 - **Ruff Linter**: `ruff`
 
 ### Future Enhancements
-- **Integration of Prophet**: Expand demand forecasting by comparing SARIMA with Prophet, exploring Prophet's handling of seasonality and trends.
 - **Model Optimization**: Enhance SARIMA model performance by tuning parameters based on demand patterns.
 - **Real-time Data Feeds**: Incorporate real-time sales and courier data to update forecasts dynamically.
 
